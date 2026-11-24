@@ -1,0 +1,177 @@
+{
+  "canvas_fingerprint": "1962496568",
+  "cookie_enabled": true,
+  "debugger_detected": -1,
+  "device_pixel_ratio": 1.0,
+  "devtools_open": false,
+  "events": "",
+  "is_iframe": false,
+  "language": "zh-CN",
+  "languages": [
+    "zh-CN"
+  ],
+  "main_script": "",
+  "max_touch_points": 10,
+  "memory_js_heap_size_limit": 3760000000,
+  "memory_total_js_heap_size": 10000000,
+  "memory_used_js_heap_size": 10000000,
+  "mime_types": [
+    {
+      "description": "Portable Document Format",
+      "suffixes": "pdf",
+      "type": "application/pdf"
+    },
+    {
+      "description": "Portable Document Format",
+      "suffixes": "pdf",
+      "type": "text/pdf"
+    }
+  ],
+  "on_line": true,
+  "plugins": [
+    {
+      "description": "Portable Document Format",
+      "filename": "internal-pdf-viewer",
+      "name": "PDF Viewer"
+    },
+    {
+      "description": "Portable Document Format",
+      "filename": "internal-pdf-viewer",
+      "name": "Chrome PDF Viewer"
+    },
+    {
+      "description": "Portable Document Format",
+      "filename": "internal-pdf-viewer",
+      "name": "Chromium PDF Viewer"
+    },
+    {
+      "description": "Portable Document Format",
+      "filename": "internal-pdf-viewer",
+      "name": "Microsoft Edge PDF Viewer"
+    },
+    {
+      "description": "Portable Document Format",
+      "filename": "internal-pdf-viewer",
+      "name": "WebKit built-in PDF"
+    }
+  ],
+  "plugins_count": 5,
+  "referer": "",
+  "runtime_type": "browser",
+  "screen_color_depth": 24,
+  "screen_height": 768,
+  "screen_orientation_angle": 0,
+  "screen_orientation_type": "landscape-primary",
+  "screen_pixel_depth": 24,
+  "screen_width": 1365,
+  "tampered_nav_props": [],
+  "touch_support": true,
+  "wasm_ver": "0.0.8",
+  "webgl": {
+    "extensions": {
+      "supported_extensions": [
+        "ANGLE_instanced_arrays",
+        "EXT_blend_minmax",
+        "EXT_clip_control",
+        "EXT_color_buffer_half_float",
+        "EXT_depth_clamp",
+        "EXT_disjoint_timer_query",
+        "EXT_float_blend",
+        "EXT_frag_depth",
+        "EXT_polygon_offset_clamp",
+        "EXT_shader_texture_lod",
+        "EXT_texture_compression_bptc",
+        "EXT_texture_compression_rgtc",
+        "EXT_texture_filter_anisotropic",
+        "EXT_texture_mirror_clamp_to_edge",
+        "EXT_sRGB",
+        "KHR_parallel_shader_compile",
+        "OES_element_index_uint",
+        "OES_fbo_render_mipmap",
+        "OES_standard_derivatives",
+        "OES_texture_float",
+        "OES_texture_float_linear",
+        "OES_texture_half_float",
+        "OES_texture_half_float_linear",
+        "OES_vertex_array_object",
+        "WEBGL_blend_func_extended",
+        "WEBGL_color_buffer_float",
+        "WEBGL_compressed_texture_s3tc",
+        "WEBGL_compressed_texture_s3tc_srgb",
+        "WEBGL_debug_renderer_info",
+        "WEBGL_debug_shaders",
+        "WEBGL_depth_texture",
+        "WEBGL_draw_buffers",
+        "WEBGL_lose_context",
+        "WEBGL_multi_draw",
+        "WEBGL_polygon_mode"
+      ],
+      "unknown": true
+    },
+    "parameters": {
+      "unknown": "Google Inc. (NVIDIA)"
+    },
+    "precision": {
+      "frag_shader_high_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "frag_shader_low_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "frag_shader_low_int": {
+        "precision": 0,
+        "range_max": 30,
+        "range_min": 31
+      },
+      "frag_shader_medium_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "frag_shader_medium_int": {
+        "precision": 0,
+        "range_max": 30,
+        "range_min": 31
+      },
+      "vert_shader_high_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_high_int": {
+        "precision": 0,
+        "range_max": 30,
+        "range_min": 31
+      },
+      "vert_shader_low_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_low_int": {
+        "precision": 0,
+        "range_max": 30,
+        "range_min": 31
+      },
+      "vert_shader_medium_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_medium_int": {
+        "precision": 0,
+        "range_max": 30,
+        "range_min": 31
+      }
+    },
+    "renderer": "Google Inc. (NVIDIA)",
+    "vendor": "ANGLE (NVIDIA, NVIDIA GeForce RTX 5060 Ti (0x00002D04) Direct3D11 vs_5_0 ps_5_0, D3D11)",
+    "version": "1.0"
+  },
+  "window_height": 768,
+  "window_width": 1365
+}

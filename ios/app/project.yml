@@ -1,0 +1,50 @@
+# XcodeGen spec: `xcodegen generate` produces LingxiWorkspace.xcodeproj.
+#
+# The Python interpreter itself comes from beeware/Python-Apple-support and is
+# unpacked by Scripts/build_python_framework.sh into Resources/python; the
+# business layer is staged by Scripts/stage_business.sh into Resources/business.
+name: LingxiWorkspace
+options:
+  bundleIdPrefix: cn.pppyl
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+
+packages:
+  PythonKit:
+    url: https://github.com/pvieito/PythonKit.git
+    from: 0.4.0
+
+targets:
+  LingxiWorkspace:
+    type: application
+    platform: iOS
+    sources:
+      - path: LingxiWorkspace
+        excludes:
+          - "Resources/python/**"
+    resources:
+      - path: LingxiWorkspace/Resources/business
+        type: folder
+      - path: LingxiWorkspace/Resources/python
+        type: folder
+        optional: true
+    info:
+      path: LingxiWorkspace/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: cn.pppyl.lingxiworkspace
+        MARKETING_VERSION: "1.9.10"
+        CURRENT_PROJECT_VERSION: "1"
+        SWIFT_VERSION: "5.9"
+        TARGETED_DEVICE_FAMILY: "1,2"
+        CODE_SIGN_STYLE: Automatic
+        ENABLE_BITCODE: NO
+        # CPython ships its own libpython3.12.a; the linker needs to see it.
+        OTHER_LDFLAGS: "$(inherited) -lpython3.12"
+        LIBRARY_SEARCH_PATHS: "$(inherited) $(SRCROOT)/LingxiWorkspace/Resources/python/lib"
+        HEADER_SEARCH_PATHS: "$(inherited) $(SRCROOT)/LingxiWorkspace/Resources/python/include/python3.12"
+        SWIFT_OBJC_BRIDGING_HEADER: LingxiWorkspace/LingxiWorkspace-Bridging-Header.h
+    dependencies:
+      - package: PythonKit
+        product: PythonKit

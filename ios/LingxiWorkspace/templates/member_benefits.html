@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>会员领取 · 本地工具台</title><link rel="icon" href="/favicon.ico">
+  <link rel="stylesheet" href="/static/portal.css"><link rel="stylesheet" href="/static/workspace.css">
+  <link rel="stylesheet" href="/static/member-benefits.css?v=inline"><link rel="stylesheet" href="/static/mobile.css?v=mobile-1">
+  <script src="/static/account-window.js" defer></script><script src="/static/workspace.js" defer></script>
+  <script src="/static/member-benefits.js?v=inline" defer></script><script src="/static/mobile.js?v=mobile-1" defer></script>
+  {% include 'theme_head.html' %}
+</head>
+<body class="workspace-app" data-workspace="member-benefits">
+<main class="portal-shell member-shell">
+  <section class="member-heading">
+    <div><h1>会员领取</h1><p>查看已开通会员的礼包、福袋、五折购和全网随心系权益。</p></div>
+    <button id="member-refresh" class="secondary" type="button" disabled>刷新权益</button>
+  </section>
+  <section class="pool-panel member-panel" aria-labelledby="member-accounts-title">
+    <h2 id="member-accounts-title">共享账号</h2>
+    <div id="member-accounts" class="member-accounts" role="group" aria-label="会员权益账号"></div>
+    <div class="member-query-status">
+      <p id="member-message" class="member-muted" role="status">正在读取共享账号…</p>
+      <button id="member-manage-login" class="secondary" type="button" hidden>打开账号管理</button>
+    </div>
+  </section>
+  <section id="member-vips" class="member-grid" aria-label="当前账号的会员权益" hidden>
+    <section id="member-products-panel" class="pool-panel member-panel" aria-labelledby="member-products-title" hidden>
+      <h2 id="member-products-title">全网随心系</h2>
+      <div id="member-products"></div>
+    </section>
+  </section>
+</main>
+<template id="member-stbk-template">
+  <form class="member-stbk-claim">
+    <label>星巴克礼包领取验证码</label>
+    <div class="member-stbk-fields">
+      <input type="text" inputmode="numeric" autocomplete="one-time-code"
+             maxlength="6" pattern="[0-9]{4}|[0-9]{6}" required disabled>
+      <button class="secondary" type="button">获取验证码</button>
+      <button class="primary" type="submit" disabled>确认领取</button>
+    </div>
+  </form>
+</template>
+</body>
+</html>

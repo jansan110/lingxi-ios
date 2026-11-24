@@ -1,0 +1,180 @@
+{
+  "canvas_fingerprint": "1056514958",
+  "cookie_enabled": true,
+  "debugger_detected": -1,
+  "device_pixel_ratio": 2.625,
+  "devtools_open": false,
+  "hardware_concurrency": 8,
+  "hostname": "dev.coc.10086.cn",
+  "init_stack": [
+    "Error",
+    "    at eval (eval at <anonymous> (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25), <anonymous>:1:1)",
+    "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25",
+    "    at handleError (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:922:18)",
+    "    at __wbg_eval_c311194bb27c7836 (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:219:58)",
+    "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[208]:0x46ca6",
+    "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[200]:0x45087",
+    "    at __wbg_finalize_init (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:1043:10)",
+    "    at __wbg_init (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:1125:12)",
+    "    at async initWasmCompat (https://dev.coc.10086.cn/coc/web6/ageFeedbackV2/?pageId=1879720710683729920&channelId=P00000001090&iteration=true:49:9)",
+    "    at async main (https://dev.coc.10086.cn/coc/web6/ageFeedbackV2/?pageId=1879720710683729920&channelId=P00000001090&iteration=true:96:7)"
+  ],
+  "language": "zh-CN",
+  "languages": [
+    "zh-CN",
+    "en-US"
+  ],
+  "main_script": "async function initWasmCompat(init, WASM_URL) {\ntry {\nawait init({ module_or_path: WASM_URL });\n} catch (e1) {\nconsole.warn(\"[wasm] init with object failed, fallback\", e1);\n\ntry {\nawait init(WASM_URL);\n} catch (e2) {\nconsole.warn(\"[wasm] direct init failed, try ArrayBuffer\", e2);\nconst res = await fetch(WASM_URL);\nconst bytes = await res.arrayBuffer();\nawait init(bytes);\n}\n}\n}\n\nasync function main() {\nconsole.log(\"[wasm] init start\");\n\nif (!(\"WebAssembly\" in window)) {\nconsole.error(\"[wasm] WebA",
+  "max_touch_points": 5,
+  "memory_js_heap_size_limit": 3140000000,
+  "memory_total_js_heap_size": 12700000,
+  "memory_used_js_heap_size": 11200000,
+  "mime_types": [],
+  "on_line": true,
+  "platform": "Linux aarch64",
+  "platform_touch": "Linux aarch64:5",
+  "plugins": [],
+  "plugins_count": 0,
+  "port": "",
+  "protocol": "https:",
+  "referer": "",
+  "runtime_type": "browser",
+  "screen_color_depth": 24,
+  "screen_height": 915,
+  "screen_orientation_angle": 0,
+  "screen_orientation_type": "portrait-primary",
+  "screen_pixel_depth": 24,
+  "screen_width": 412,
+  "timezone_offset": -480,
+  "tls_fingerprint": {
+    "has_subtle_crypto": true,
+    "is_secure_context": true,
+    "protocol": "https:",
+    "user_agent_contains_ssl": false
+  },
+  "touch_support": true,
+  "wasm_ver": "0.0.3",
+  "webgl": {
+    "extensions": {
+      "supported_extensions": [
+        "ANGLE_instanced_arrays",
+        "EXT_blend_minmax",
+        "EXT_color_buffer_half_float",
+        "EXT_float_blend",
+        "EXT_texture_compression_bptc",
+        "EXT_texture_compression_rgtc",
+        "EXT_texture_filter_anisotropic",
+        "EXT_sRGB",
+        "OES_element_index_uint",
+        "OES_fbo_render_mipmap",
+        "OES_standard_derivatives",
+        "OES_texture_float",
+        "OES_texture_float_linear",
+        "OES_texture_half_float",
+        "OES_texture_half_float_linear",
+        "OES_vertex_array_object",
+        "WEBGL_color_buffer_float",
+        "WEBGL_compressed_texture_astc",
+        "WEBGL_compressed_texture_etc",
+        "WEBGL_compressed_texture_etc1",
+        "WEBGL_compressed_texture_s3tc",
+        "WEBGL_compressed_texture_s3tc_srgb",
+        "WEBGL_debug_renderer_info",
+        "WEBGL_debug_shaders",
+        "WEBGL_depth_texture",
+        "WEBGL_lose_context",
+        "WEBGL_multi_draw"
+      ],
+      "unknown": true
+    },
+    "parameters": {
+      "unknown": "Qualcomm"
+    },
+    "precision": {
+      "frag_shader_high_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "frag_shader_low_float": {
+        "precision": 10,
+        "range_max": 15,
+        "range_min": 15
+      },
+      "frag_shader_low_int": {
+        "precision": 0,
+        "range_max": 15,
+        "range_min": 15
+      },
+      "frag_shader_medium_float": {
+        "precision": 10,
+        "range_max": 15,
+        "range_min": 15
+      },
+      "frag_shader_medium_int": {
+        "precision": 0,
+        "range_max": 15,
+        "range_min": 15
+      },
+      "vert_shader_high_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_high_int": {
+        "precision": 0,
+        "range_max": 31,
+        "range_min": 31
+      },
+      "vert_shader_low_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_low_int": {
+        "precision": 0,
+        "range_max": 31,
+        "range_min": 31
+      },
+      "vert_shader_medium_float": {
+        "precision": 23,
+        "range_max": 127,
+        "range_min": 127
+      },
+      "vert_shader_medium_int": {
+        "precision": 0,
+        "range_max": 31,
+        "range_min": 31
+      }
+    },
+    "renderer": "Qualcomm",
+    "vendor": "Adreno (TM) 740",
+    "version": "1.0"
+  },
+  "window_height": 761,
+  "window_width": 411,
+  "last_call_stack": {
+    "gdt": [
+      "Error",
+      "    at eval (eval at <anonymous> (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25), <anonymous>:1:1)",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25",
+      "    at handleError (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:922:18)",
+      "    at __wbg_eval_c311194bb27c7836 (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:219:58)",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[208]:0x46ca6",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[138]:0x11f4e",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[174]:0x3d536",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[158]:0x35f73"
+    ],
+    "claim": [
+      "Error",
+      "    at eval (eval at <anonymous> (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25), <anonymous>:1:1)",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:220:25",
+      "    at handleError (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:922:18)",
+      "    at __wbg_eval_c311194bb27c7836 (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:219:58)",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[208]:0x46ca6",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[138]:0x11f4e",
+      "    at https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel_bg.wasm:wasm-function[245]:0x4c982",
+      "    at Wheel.roto (https://res.coc.10086.cn/res/cdn/coc1-online/fixedPath/coc1/ageFeeRevision/wheel.js:54:18)"
+    ]
+  }
+}

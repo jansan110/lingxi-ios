@@ -1,0 +1,9 @@
+{% if workspace_features %}
+<meta name="workspace-features" content="{{ workspace_features() | tojson | forceescape }}">
+{% if workspace_network is defined %}
+<meta name="workspace-network" content="{{ workspace_network() | tojson | forceescape }}">
+<script src="/static/network.js"></script>
+{% endif %}
+{% endif %}
+<script src="/static/theme.js"></script>
+<link rel="stylesheet" href="/static/theme.css">

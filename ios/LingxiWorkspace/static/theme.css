@@ -1,0 +1,408 @@
+/* The switch follows the workspace sidebar palette in either theme. */
+.workspace-theme {
+  --theme-track: #e9eff6;
+  --theme-track-border: #cfd9e3;
+  --theme-icon: #4b6079;
+  --theme-thumb: #fff;
+  --theme-thumb-ink: #172b4d;
+  --theme-ring: #235fc1;
+  --theme-hover-fill: #7894b526;
+  padding: 0;
+  margin: 20px 0 0;
+  border: 0;
+  min-inline-size: 0;
+  text-align: center;
+}
+.workspace-nav .workspace-theme,
+html[data-theme="dark"] .workspace-theme {
+  --theme-track: #101c2d;
+  --theme-track-border: #3b4d66;
+  --theme-icon: #b6c6db;
+  --theme-thumb: #dceafe;
+  --theme-thumb-ink: #17355b;
+  --theme-ring: #a9cdff;
+}
+.workspace-nav-footer .workspace-theme {
+  flex: 0 0 100%;
+  margin: 0 0 9px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf3fb16;
+}
+.workspace-theme legend {
+  margin: 0 auto 7px;
+  padding: 0;
+  font-size: 11px;
+  line-height: 16px;
+  color: var(--theme-icon);
+}
+.workspace-theme-options {
+  --theme-segment: 46px;
+  --theme-gap: 2px;
+  --theme-inset: 4px;
+  --theme-step: calc(var(--theme-segment) + var(--theme-gap));
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: repeat(3, var(--theme-segment));
+  gap: var(--theme-gap);
+  padding: var(--theme-inset);
+  vertical-align: top;
+  border: 1px solid var(--theme-track-border);
+  border-radius: 16px;
+  background: var(--theme-track);
+}
+.workspace-theme-options::before {
+  content: "";
+  position: absolute;
+  inset: var(--theme-inset) auto var(--theme-inset) var(--theme-inset);
+  width: var(--theme-segment);
+  border-radius: 11px;
+  background: var(--theme-thumb);
+  box-shadow: 0 2px 6px #0b152838;
+  transform: translateX(var(--theme-offset, 0px));
+  pointer-events: none;
+}
+.workspace-theme-options:has(input[value="system"]:checked) { --theme-offset: var(--theme-step); }
+.workspace-theme-options:has(input[value="light"]:checked) { --theme-offset: calc(2 * var(--theme-step)); }
+.workspace-theme-options label { position: relative; cursor: pointer; }
+.workspace-theme-options input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.workspace-theme-options label > span {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 4px;
+  min-height: 43px;
+  border-radius: 11px;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 600;
+  color: var(--theme-icon);
+}
+.workspace-theme-options svg { width: 16px; height: 16px; }
+.workspace-theme-options label:hover > span { background: var(--theme-hover-fill); }
+.workspace-theme-options input:checked + span { color: var(--theme-thumb-ink); }
+.workspace-theme-options label:hover input:checked + span { background: transparent; }
+.workspace-theme-options input:checked + span svg { transform: translateY(-1px) scale(1.08); }
+.workspace-theme-options input:focus-visible + span {
+  outline: 2px solid var(--theme-ring);
+  outline-offset: -2px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .workspace-theme-options::before { transition: transform 230ms cubic-bezier(.22, .85, .24, 1); }
+  .workspace-theme-options label > span { transition: color 140ms ease, background-color 140ms ease; }
+  .workspace-theme-options svg { transition: transform 230ms cubic-bezier(.22, .85, .24, 1); }
+  .workspace-theme-changing body:is(.workspace-app, .access-page),
+  .workspace-theme-changing :is(.workspace-nav, .workspace-topbar, .pool-panel, .dashboard-panel, .dashboard-stat, .access-card) {
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+  }
+}
+@media (forced-colors: active) {
+  .workspace-theme-options::before { background: Highlight; forced-color-adjust: none; }
+  .workspace-theme-options input:checked + span { color: HighlightText; forced-color-adjust: none; }
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --ws-bg: #101722;
+  --ws-paper: #1a2535;
+  --ws-line: #36465d;
+  --ws-ink: #e9eff8;
+  --ws-text: #c4d1e2;
+  --ws-muted: #a0b1c9;
+  --ws-blue: #8abaff;
+  --ws-blue-soft: #213a5c;
+  --ws-blue-hover: #427bc4;
+  --theme-raised: #212e40;
+  --theme-hover: #253750;
+  --theme-action: #285dab;
+  --theme-action-hover: #326ec1;
+  --theme-red: #ffabb4;
+  --theme-red-bg: #442530;
+  --theme-green: #83ddbc;
+  --theme-green-bg: #203b36;
+  --theme-orange: #f6cf90;
+  --theme-orange-bg: #413429;
+  color: var(--ws-ink);
+  background: var(--ws-bg);
+}
+@media (width > 900px) {
+  html[data-theme="dark"] body:is(.workspace-app, .access-page) {
+    --control-primary: #dbe4ed;
+    --control-primary-hover: #edf2f7;
+    --control-primary-ink: #202d3c;
+    --control-ink: #ccd7e5;
+    --control-secondary: #253244;
+    --control-border: #3a4a60;
+    --control-hover: #2e3c50;
+    --control-hover-border: #53647a;
+    --control-selected: #2a394d;
+    --control-selected-ink: #dce7f5;
+    --control-selected-border: #455a73;
+    --control-danger: #eab1b5;
+    --control-danger-hover: #f6cdd0;
+    --control-danger-bg: transparent;
+    --control-danger-hover-bg: #392b37;
+    --control-danger-border: #58404c;
+    --control-confirm: #934654;
+    --control-confirm-hover: #a34f5d;
+    --control-confirm-ink: #fff;
+    --control-disabled: #222c3b;
+    --control-disabled-ink: #98a7ba;
+    --control-disabled-border: #364354;
+    --control-focus: #9ab5d1;
+    --control-toggle: #57769b;
+    --control-toggle-off: #4b5b6d;
+  }
+}
+html[data-theme="dark"] body.access-page { color: var(--ws-ink); background: var(--ws-bg); }
+html[data-theme="dark"] .workspace-app .workspace-nav { background: #0f1928; }
+html[data-theme="dark"] .workspace-app .workspace-topbar { background: #1a2535f5; }
+html[data-theme="dark"] .workspace-app :is(.checkin-list-heading, .checkin-list-footer) {
+  border-color: var(--ws-line);
+}
+html[data-theme="dark"] .bills-shell {
+  --info-ink: var(--ws-ink);
+  --info-muted: var(--ws-muted);
+  --info-line: var(--ws-line);
+  --info-accent: var(--ws-blue);
+}
+
+/* Page and dialog surfaces use the same levels as the workspace. */
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(
+  dialog, .pool-panel, .feature-card, .list-panel, .card, .account-bar, .stat,
+  .dashboard-stat, .dashboard-panel, .chat-accounts, .composer, .message-content,
+  .coupons-account-panel, .coupons-panel, .checkin-list-panel, .checkin-overview-card,
+  .monthly-panel, .rights-panel, .star-panel, .platforms-panel, .wed-account-panel, .wed-panel,
+  .gold-panel, .seven-panel, .web-checkin-summary > div, .bills-account-panel,
+  .bills-detail-column, .bills-panel, .usage-panel, .services-panel, .access-card,
+  .update-notice, .update-dialog, .account-pill
+) {
+  background: var(--ws-paper);
+  border-color: var(--ws-line);
+  color: var(--ws-text);
+  box-shadow: none;
+}
+html[data-theme="dark"] .workspace-app :is(#coupons-use, #coupons-details, .services-cancel-dialog, .account-manager-dialog),
+html[data-theme="dark"] .account-manager-dialog .portal-header {
+  background: var(--ws-paper);
+  border-color: var(--ws-line);
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app dialog::backdrop { background: #040912a6; }
+html[data-theme="dark"] .workspace-app :is(
+  th, .list-toolbar, .list-footer, .batch-toolbar, .selection-bar, .checkin-selection,
+  .checkin-account-controls, .coupons-toolbar, .monthly-selection, .rights-filters, .star-filters,
+  .wed-toolbar, .wed-selection, .wed-automatic, .gold-auto-summary, .seven-automation-summary,
+  .task-search-toolbar, .task-search, .plan-preview, .detail-status, .detail-content, .history-empty,
+  .coupons-payment-panel, .coupons-relogin-panel, .coupons-use-message,
+  .bills-toolbar, .bills-months, .bills-balance, .bills-extra-summary, .bills-detail-card,
+  .bills-notes, .services-tabs, .services-search-tools, .services-details-cell,
+  .services-cancel-message, .usage-group-context, .usage-original-counters, .usage-item-counters,
+  .star-gift-summary, .star-dialog-actions, .web-checkin-login-account, .gold-rules, .seven-rules,
+  .update-guide, .information-section-nav, .task-table .table-empty, .services-empty, .bills-detail-grid > .bills-empty
+) {
+  background: var(--theme-raised);
+  border-color: var(--ws-line);
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app :is(.account-table th, .task-table th, .information-columns .usage-item-counters, .information-columns .bills-notes, .information-columns .bills-overview) {
+  background: var(--theme-raised);
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app :is(.coupons-table, .bills-table, .services-table, .wed-table, .star-table, .gold-table, .seven-table, .account-table) :is(td, th) {
+  border-color: var(--ws-line);
+}
+html[data-theme="dark"] .workspace-app :is(
+  .gold-table tbody tr:nth-child(even), .seven-table tbody tr:nth-child(even),
+  .mobile-record-table > tbody > tr, .account-table .account-table-empty
+) {
+  background: var(--theme-raised);
+  border-color: var(--ws-line);
+}
+html[data-theme="dark"] .workspace-app :is(tbody tr:hover td, .task-table tbody tr:hover td) {
+  background: var(--theme-hover);
+}
+html[data-theme="dark"] .workspace-app :is(.account-table .account-ready td, .account-table .account-ready:hover td) { background: var(--theme-green-bg); }
+html[data-theme="dark"] .workspace-app :is(.account-table .account-expired td, .account-table .account-expired:hover td, .services-table > tbody > .services-cancelled > td) { background: var(--theme-red-bg); }
+html[data-theme="dark"] .workspace-app .account-table .account-pending td { background: var(--theme-orange-bg); }
+html[data-theme="dark"] .workspace-app :is(.account-table .account-ready, .account-table .account-expired, .account-table .account-pending) {
+  border-color: var(--ws-line);
+}
+
+/* Text, fields and actions retain their hierarchy in both viewport sizes. */
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(h1, h2, h3, h4, th, td strong, label, legend) { color: var(--ws-ink); }
+html[data-theme="dark"] .workspace-app :is(
+  .portal-header h2, .dashboard-stat strong, .bills-account strong, .coupons-account strong,
+  .account-choice-title strong, .phone-line strong, .bills-card-heading strong,
+  .usage-overview-card h3, .usage-group-heading strong, .usage-item-name, .services-name-label,
+  .managed-account strong, .task-account strong, .feature-card h2, .web-checkin-summary strong, .update-versions,
+  .checkin-toggle strong, .monthly-toggle strong, .gold-toggle strong, .seven-toggle strong,
+  .network-switches strong, .network-custom-toggle strong, .bills-summary strong, .bills-balance > strong
+) { color: var(--ws-ink); }
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(
+  small, .muted, .footnote, .form-hint, .page-footer, .portal-footer, .activity-footer,
+  .workspace-location-root, .workspace-location-divider, .workspace-location-parent,
+  .access-brand, .access-card > p, .account-shell .session-message, .account-shell .account-time,
+  .coupons-empty, .coupons-list-meta, .coupons-filters-meta, .usage-empty, .bills-empty,
+  .bills-account-heading > span, .usage-sync, .platforms-order-number, .update-notes,
+  .bills-summary, .bills-consumption, .seven-rules summary, .gold-rules summary
+) { color: var(--ws-muted); }
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(input:not([type="checkbox"], [type="radio"]), textarea, select),
+html[data-theme="dark"] .workspace-app :is(#coupons-payment-url, #monthly-entry-url, .account-table .account-name input) {
+  background: var(--ws-bg);
+  border-color: var(--ws-line);
+  color: var(--ws-ink);
+}
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(input, textarea)::placeholder { color: var(--ws-muted); }
+html[data-theme="dark"] .workspace-app .account-picker-search { background: var(--ws-bg); border-color: var(--ws-line); }
+html[data-theme="dark"] .workspace-app :is(.account-picker-search, .task-search) input { background: transparent; color: var(--ws-ink); }
+html[data-theme="dark"] .workspace-app :is(#coupons-details .coupons-details-value, .services-cancel-close) {
+  background: var(--theme-raised);
+  border-color: var(--ws-line);
+  color: var(--ws-text);
+}
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(.primary, .portal-primary, .primary-button, .workspace-primary, .access-primary, .update-primary) {
+  background: var(--control-primary, var(--theme-action));
+  border-color: var(--control-primary, var(--theme-action));
+  color: var(--control-primary-ink, #fff);
+}
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(.primary, .portal-primary, .primary-button, .workspace-primary, .access-primary, .update-primary):hover:not(:disabled) {
+  background: var(--control-primary-hover, var(--theme-action-hover));
+  border-color: var(--control-primary-hover, var(--theme-action-hover));
+}
+html[data-theme="dark"] .workspace-app :is(.secondary, .portal-secondary, .secondary-button, .workspace-version, .update-secondary, .update-asset, .platforms-order-controls button, .chat-accounts .secondary):not(:disabled) {
+  background: var(--control-secondary, var(--theme-raised));
+  border-color: var(--control-border, #546883);
+  color: var(--control-ink, var(--ws-text));
+}
+html[data-theme="dark"] .workspace-app :is(.secondary, .portal-secondary, .secondary-button, .workspace-version, .update-secondary, .update-asset, .platforms-order-controls button, .chat-accounts .secondary):hover:not(:disabled) {
+  background: var(--control-hover, var(--theme-hover));
+  border-color: var(--control-hover-border, var(--ws-blue));
+  color: var(--ws-ink);
+}
+html[data-theme="dark"] .workspace-app :is(.quiet, .portal-quiet, .quiet-button, .account-manager-close, .update-icon-close, .bills-item-toggle, .account-choice-select, .workspace-account-button, .workspace-menu, .services-name-label, .usage-group-heading) {
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app :is(.quiet, .portal-quiet, .quiet-button, .account-manager-close, .update-icon-close, .bills-item-toggle, .account-choice-select, .services-name-label, .usage-group-heading):hover:enabled {
+  background: var(--control-hover, var(--theme-hover));
+  color: var(--ws-ink);
+}
+html[data-theme="dark"] .workspace-app :is([role="tab"], .filters button, .filter-tabs button, .coupons-tabs button, .checkin-tabs button, .wed-filters button, .bills-month-tab, .services-tab) {
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app button.bills-month-tab { background: transparent; }
+html[data-theme="dark"] .workspace-app button.bills-month-tab span { color: var(--ws-muted); }
+html[data-theme="dark"] .workspace-app :is([role="tab"], .filters button, .filter-tabs button, .coupons-tabs button, .checkin-tabs button, .wed-filters button, .bills-month-tab, .services-tab):is(.selected, .active, [aria-selected="true"], [aria-pressed="true"]) {
+  background: var(--control-selected, var(--ws-blue-soft));
+  color: var(--control-selected-ink, #c0daff);
+  box-shadow: var(--control-tab-ring, inset 0 -2px var(--ws-blue));
+}
+html[data-theme="dark"] .workspace-app :is(.bills-account, .coupons-account, .rights-account, .wed-account, .stat, .account-choice) {
+  background: var(--ws-paper);
+  border-color: var(--ws-line);
+  color: var(--ws-text);
+}
+html[data-theme="dark"] .workspace-app :is(.bills-account, .coupons-account, .rights-account, .wed-account, .stat, .account-choice):hover {
+  background: var(--theme-hover);
+  border-color: #546883;
+}
+html[data-theme="dark"] .workspace-app :is(.bills-account, .coupons-account, .rights-account, .wed-account, .stat, .account-choice):is(.selected, .active, [aria-pressed="true"]),
+html[data-theme="dark"] .workspace-app :is(.account-option, .checkin-account-option, .star-account-option):has(input:checked) {
+  background: var(--control-selected, var(--ws-blue-soft));
+  border-color: var(--control-selected-border, var(--ws-blue));
+}
+html[data-theme="dark"] .workspace-app :is(.workspace-account-avatar, .account-choice-avatar, .count-chip, .dashboard-stat-icon, .feature-icon, .checkin-symbol, .account-icon, .prize-mark, .welcome-icon, .coupons-best-plan, .services-tab-count, .usage-group-chevron) {
+  background: var(--ws-blue-soft);
+  border-color: var(--ws-line);
+  color: var(--ws-blue);
+}
+html[data-theme="dark"] .workspace-app button:is(.coupons-use-button, .account-choice-login):enabled {
+  background: var(--control-secondary, var(--ws-blue-soft));
+  border-color: var(--control-border, var(--ws-line));
+  color: var(--control-ink, var(--ws-blue));
+}
+html[data-theme="dark"] .workspace-app button:is(.coupons-use-button, .account-choice-login):hover:enabled {
+  background: var(--control-hover, var(--ws-blue-soft));
+  border-color: var(--control-hover-border, var(--ws-line));
+}
+html[data-theme="dark"] .workspace-app :is(.chat-accounts .mark, .tag, .message.user .message-content, .message.user .avatar, .next-task) {
+  background: var(--ws-blue-soft);
+  border-color: var(--ws-line);
+  color: var(--ws-ink);
+}
+html[data-theme="dark"] .workspace-app :is(.danger, .danger-outline, .logout-action, .platforms-danger, .services-cancel-action, .platforms-remove, .row-actions .stop, .task-actions .danger):enabled {
+  background: var(--control-danger-bg, var(--theme-red-bg));
+  border-color: var(--control-danger-border, #925761);
+  color: var(--control-danger, var(--theme-red));
+}
+html[data-theme="dark"] .workspace-app :is(.danger, .danger-outline, .logout-action, .platforms-danger, .services-cancel-action, .platforms-remove):hover:enabled {
+  background: var(--control-danger-hover-bg, #5a2a36);
+  color: var(--control-danger-hover, #ffd4d9);
+}
+html[data-theme="dark"] .workspace-app :is(#wed-stop-confirm, #services-cancel-submit):enabled {
+  background: var(--control-confirm, var(--theme-red-bg));
+  border-color: var(--control-confirm, #925761);
+  color: var(--control-confirm-ink, var(--theme-red));
+}
+html[data-theme="dark"] .workspace-app :is(#wed-stop-confirm, #services-cancel-submit):hover:enabled {
+  background: var(--control-confirm-hover, #5a2a36);
+  border-color: var(--control-confirm-hover, #925761);
+  color: var(--control-confirm-ink, #ffd4d9);
+}
+html[data-theme="dark"] :is(.workspace-app, .access-page) button:disabled,
+html[data-theme="dark"] .workspace-app :is(#coupons-use, .bills-month-controls, .platforms-order-controls, .account-manager-dialog) button:disabled,
+html[data-theme="dark"] .workspace-app #services-cancel-submit:disabled {
+  background: var(--control-disabled, #283344);
+  border-color: var(--control-disabled-border, var(--ws-line));
+  color: var(--control-disabled-ink, var(--ws-muted));
+  box-shadow: none;
+  opacity: 1;
+}
+html[data-theme="dark"] .workspace-app :is(a, button, input, select, textarea, summary):focus-visible { outline-color: var(--control-focus, var(--ws-blue)); }
+html[data-theme="dark"] .workspace-app :is(.list-footer a, .platforms-open, .web-checkin-back) { color: var(--ws-blue); }
+html[data-theme="dark"] .workspace-app :is(
+  .coupons-account-heading h2 span, .bills-account-heading h2 span, .wed-account-heading h2 span,
+  .monthly-toolbar h2 span, .gold-toolbar h2 span, .seven-toolbar h2 span, .rights-count,
+  .platforms-panel-heading h2 span
+) { background: var(--ws-blue-soft); color: var(--ws-blue); }
+
+/* Preserve the meaning of the green, amber and red status indicators. */
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(
+  .badge.success, .status-badge.ready, .dashboard-badge.success, .checkin-badge.success,
+  .monthly-badge.success, .rights-state.success, .star-badge.green, .wed-badge.green,
+  .gold-badge.success, .seven-badge.success, .account-choice-badge.ready, .coupons-status.available,
+  .coupons-tag-redeem, .coupons-account-reminder, .prize-state:not(.expired),
+  .platforms-badge.running, .access-feedback.success, .checkin-feedback.success, .monthly-feedback.success,
+  .gold-feedback.success, .seven-feedback.success, .rights-message.success, .services-cancel-message.success
+) { background: var(--theme-green-bg); color: var(--theme-green); }
+html[data-theme="dark"] :is(.workspace-app, .access-page) :is(
+  .badge.error, .status-badge.attention, .dashboard-badge.attention, .checkin-badge.error,
+  .monthly-badge.error, .star-badge.red, .wed-badge.red, .gold-badge.error, .seven-badge.error,
+  .account-choice-badge.expired, .access-feedback:not(.success), .platforms-feedback.error,
+  .rights-error, .coupons-feedback, .services-cancel-message.error
+) { background: var(--theme-red-bg); color: var(--theme-red); border-color: #69424d; }
+html[data-theme="dark"] .workspace-app :is(
+  .badge.active, .status-badge.running, .dashboard-badge.running, .checkin-badge.active,
+  .monthly-badge.running, .rights-state.attention, .star-badge.orange, .wed-badge.orange,
+  .gold-badge.attention, .seven-badge.attention, .account-choice-badge.pending, .coupons-tag-expiring,
+  .coupons-category.fee, .coupons-notices, .coupons-payment-scan-tip, .wed-feedback.warning,
+  .platforms-delete-warning, .network-address-warning, .page-notice, .star-warning,
+  .seven-notice, .gold-notice, .seven-limited, .gold-limited
+) { background: var(--theme-orange-bg); color: var(--theme-orange); border-color: #66533d; }
+html[data-theme="dark"] .workspace-app :is(
+  .badge.waiting, .status-badge.scheduled, .dashboard-badge.waiting, .checkin-badge.waiting,
+  .monthly-badge.available, .rights-state.pending, .star-badge.blue, .wed-badge.blue,
+  .gold-badge.pending, .seven-badge.pending, .coupons-category.flow, .coupons-tag-worth
+) { background: var(--ws-blue-soft); color: var(--ws-blue); }
+html[data-theme="dark"] .workspace-app :is(
+  .status-badge.ended, .coupons-status.history, .coupons-category:not(.fee, .flow),
+  .platforms-badge.expired, .platforms-badge.disabled, .platforms-badge.deleted, .prize-state.expired
+) { background: var(--theme-raised); color: var(--ws-muted); }
+html[data-theme="dark"] .workspace-app :is(.progress-track, .usage-progress, .usage-meter, .seven-meter i) { background: var(--theme-raised); }
+html[data-theme="dark"] .workspace-app progress::-webkit-progress-bar { background: var(--theme-raised); }
+html[data-theme="dark"] .workspace-app :is(.coupons-payment-qr, .coupons-use-verification iframe) { color-scheme: light; }
