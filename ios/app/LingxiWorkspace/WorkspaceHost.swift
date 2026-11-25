@@ -63,8 +63,8 @@ final class WorkspaceHost: ObservableObject {
                         guard let self, let web = self.webView else { return }
                         self.load(url, in: web)
                     }
-                case .failure(let message):
-                    self.markFailed(message)
+                case .failure(let failure):
+                    self.markFailed(failure.localizedDescription)
                 }
             }
         }
