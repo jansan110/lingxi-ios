@@ -156,7 +156,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -eu\nFRAMEWORK=\"${SRCROOT}/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/Python.framework\"\nDEST=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nSTDLIB=\"${SRCROOT}/LingxiWorkspace/Resources/python/Python.xcframework/lib/python3.12\"\nif [ ! -d \"$FRAMEWORK\" ]; then\n  echo \"error: Python.framework missing at $FRAMEWORK\" >&2\n  exit 1\nfi\nmkdir -p \"$DEST\"\nrm -rf \"$DEST/Python.framework\"\ncp -R \"$FRAMEWORK\" \"$DEST/\"\nif [ -d \"$STDLIB\" ]; then\n  cp -R \"$STDLIB\" \"$DEST/Python.framework/\"\nfi\nif [ \"${CODE_SIGNING_ALLOWED}\" != \"NO\" ] && [ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" ]; then\n  codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --preserve-metadata=identifier,entitlements,flags \"$DEST/Python.framework\" || true\nfi\necho \"embedded Python.framework into $DEST\"\n";
+			shellScript = "set -eu\nFRAMEWORK=\"${SRCROOT}/Vendor/Python.xcframework/ios-arm64/Python.framework\"\nDEST=\"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nSTDLIB=\"${SRCROOT}/Vendor/Python.xcframework/lib/python3.12\"\nif [ ! -d \"$FRAMEWORK\" ]; then\n  echo \"error: Python.framework missing at $FRAMEWORK\" >&2\n  exit 1\nfi\nmkdir -p \"$DEST\"\nrm -rf \"$DEST/Python.framework\"\ncp -R \"$FRAMEWORK\" \"$DEST/\"\nif [ -d \"$STDLIB\" ]; then\n  cp -R \"$STDLIB\" \"$DEST/Python.framework/\"\nfi\nif [ \"${CODE_SIGNING_ALLOWED}\" != \"NO\" ] && [ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" ]; then\n  codesign --force --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" --preserve-metadata=identifier,entitlements,flags \"$DEST/Python.framework\" || true\nfi\necho \"embedded Python.framework into $DEST\"\n";
 		};
 
 		A6000002000000000000001 /* Resources */ = {
@@ -252,8 +252,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/include",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/include/python3.12",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/include",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/include/python3.12",
 				);
 				INFOPLIST_FILE = LingxiWorkspace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -262,11 +262,11 @@
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/lib",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/lib",
 				);
 				MARKETING_VERSION = 1.9.10;
 				OTHER_LDFLAGS = (
@@ -299,8 +299,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/include",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/include/python3.12",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/include",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/include/python3.12",
 				);
 				INFOPLIST_FILE = LingxiWorkspace/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -309,11 +309,11 @@
 				);
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(SRCROOT)/LingxiWorkspace/Resources/python/Python.xcframework/ios-arm64/lib",
+					"$(SRCROOT)/Vendor/Python.xcframework/ios-arm64/lib",
 				);
 				MARKETING_VERSION = 1.9.10;
 				OTHER_LDFLAGS = (
