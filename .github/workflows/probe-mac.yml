@@ -1,0 +1,12 @@
+name: probe-mac
+on:
+  workflow_dispatch:
+jobs:
+  m:
+    runs-on: macos-latest
+    steps:
+      - name: hello
+        run: |
+          echo macos-runner-alive
+          sw_vers
+          xcodebuild -version
