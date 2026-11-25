@@ -44,10 +44,20 @@ jobs:
           test -d "$B/templates"
           test -d "$B/static"
           test -d "$P/lib/python3.12"
-          test -d "$P/Python.xcframework/ios-arm64"
-          test -f "$P/Python.xcframework/ios-arm64/Python.framework/Python"
+          test -f "$P/lib/python3.12/os.py"
+          V=ios/app/Vendor/Python.xcframework
+          test -d "$V/ios-arm64/Python.framework"
+          test -f "$V/ios-arm64/Python.framework/Python"
+          # The xcframework carries a testbed project and simulator slices.
+          # If it ever re-appears under Resources it would be copied into the
+          # bundle wholesale, so fail loudly instead of shipping ~60 MB of dead
+          # weight inside the .ipa.
+          if [ -e "$P/Python.xcframework" ]; then
+            echo "::error::xcframework leaked into the bundle resources"
+            exit 1
+          fi
           echo "payload ok"
-          du -sh "$B" "$P"
+          du -sh "$B" "$P" "$V"
 
       - name: Build unsigned app
         working-directory: ios/app
@@ -80,12 +90,24 @@ jobs:
           fi
           file "$APP/LingxiWorkspace" || true
           lipo -info "$APP/LingxiWorkspace" || true
+          # `ditto --keepParent` keeps only the last path component, which drops
+          # the required `Payload/` prefix and produces an .ipa that no installer
+          # accepts. Zip the Payload directory itself instead.
           rm -rf Payload LingxiWorkspace-unsigned.ipa
           mkdir -p Payload
           cp -R "$APP" Payload/
-          ditto -c -k --sequesterRsrc --keepParent Payload/LingxiWorkspace.app LingxiWorkspace-unsigned.ipa
+          test -d Payload/LingxiWorkspace.app
+          zip -qry LingxiWorkspace-unsigned.ipa Payload
+          echo "--- ipa top level ---"
+          unzip -l LingxiWorkspace-unsigned.ipa | awk '{print $4}' | grep -v '^$' | cut -d/ -f1 | sort -u
+          # Hard gate: a bad prefix silently ships a broken build otherwise.
+          unzip -l LingxiWorkspace-unsigned.ipa | grep -q 'Payload/LingxiWorkspace.app/Info.plist' \
+            || { echo "::error::ipa is missing Payload/LingxiWorkspace.app/Info.plist"; exit 1; }
+          unzip -l LingxiWorkspace-unsigned.ipa | grep -q 'Payload/LingxiWorkspace.app/LingxiWorkspace$' \
+            || { echo "::error::ipa is missing the executable"; exit 1; }
+          unzip -l LingxiWorkspace-unsigned.ipa | grep -q 'Payload/LingxiWorkspace.app/python/lib/python3.12/' \
+            || { echo "::error::ipa is missing the CPython stdlib"; exit 1; }
           ls -lh LingxiWorkspace-unsigned.ipa
-          unzip -l LingxiWorkspace-unsigned.ipa | head -12
 
       - name: Upload .ipa
         uses: actions/upload-artifact@v4
