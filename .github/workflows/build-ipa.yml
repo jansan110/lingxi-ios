@@ -1,46 +1,33 @@
 name: build-ipa
 
-# Builds an unsigned .ipa on a macOS runner, which is the only place a Mach-O
-# ARM64 binary can be produced. Download the artifact and sign it yourself.
+# Produces an unsigned .ipa. A Mach-O ARM64 binary can only be linked by the
+# Apple toolchain, so this runs on a macOS runner; the artifact is then signed
+# on your own machine (Sideloadly / AltStore / codesign).
 on:
   workflow_dispatch:
-    inputs:
-      python_release:
-        description: "Python-Apple-support tag (blank = latest iOS build)"
-        required: false
-        default: ""
-  push:
-    tags: ["v*"]
 
 permissions:
   contents: read
 
 jobs:
   build:
-    runs-on: macos-14
-    timeout-minutes: 60
+    runs-on: macos-latest
+    timeout-minutes: 90
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Select Xcode
+      - name: Show toolchain
         run: |
-          ls /Applications | grep -i xcode
-          sudo xcode-select -s /Applications/Xcode.app
           xcodebuild -version
           xcrun --sdk iphoneos --show-sdk-version
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
+          python3 --version
 
       - name: Stage business layer
         run: sh ios/Scripts/stage_business.sh
 
       - name: Fetch CPython for iOS
-        env:
-          PYTHON_RELEASE: ${{ inputs.python_release }}
         run: sh ios/Scripts/fetch_python_framework.sh
 
       - name: Install pure-Python dependencies
@@ -49,14 +36,15 @@ jobs:
       - name: Verify staged payload
         run: |
           set -eu
-          test -f ios/app/LingxiWorkspace/Resources/business/app.py
-          test -d ios/app/LingxiWorkspace/Resources/business/templates
-          test -d ios/app/LingxiWorkspace/Resources/business/static
+          B=ios/app/LingxiWorkspace/Resources/business
+          test -f "$B/app.py"
+          test -f "$B/ios_runtime.py"
+          test -f "$B/java.py"
+          test -d "$B/templates"
+          test -d "$B/static"
           test -d ios/app/LingxiWorkspace/Resources/python/lib/python3.12
-          test -f ios/app/LingxiWorkspace/Resources/business/ios_runtime.py
-          test -f ios/app/LingxiWorkspace/Resources/business/java.py
           echo "payload ok"
-          du -sh ios/app/LingxiWorkspace/Resources/business ios/app/LingxiWorkspace/Resources/python
+          du -sh "$B" ios/app/LingxiWorkspace/Resources/python
 
       - name: Build unsigned app
         working-directory: ios/app
@@ -75,23 +63,26 @@ jobs:
             DEVELOPMENT_TEAM="" \
             ONLY_ACTIVE_ARCH=NO \
             ARCHS=arm64 \
-            build 2>&1 | tee build.log | tail -40
+            build 2>&1 | tee build.log | tail -60
 
       - name: Package unsigned .ipa
         working-directory: ios/app
         run: |
           set -eu
           APP="build/Build/Products/Release-iphoneos/LingxiWorkspace.app"
-          test -d "$APP" || { echo "app not found"; exit 1; }
+          if [ ! -d "$APP" ]; then
+            echo "::error::app bundle not found at $APP"
+            ls -R build/Build/Products 2>/dev/null | head -40
+            exit 1
+          fi
           file "$APP/LingxiWorkspace"
           lipo -info "$APP/LingxiWorkspace" || true
-          rm -rf Payload LingxiWorkspace.ipa
+          rm -rf Payload LingxiWorkspace-unsigned.ipa
           mkdir -p Payload
           cp -R "$APP" Payload/
-          # ditto keeps the extended attributes and symlinks a bundle needs.
           ditto -c -k --sequesterRsrc --keepParent Payload/LingxiWorkspace.app LingxiWorkspace-unsigned.ipa
           ls -lh LingxiWorkspace-unsigned.ipa
-          unzip -l LingxiWorkspace-unsigned.ipa | head -10
+          unzip -l LingxiWorkspace-unsigned.ipa | head -12
 
       - name: Upload .ipa
         uses: actions/upload-artifact@v4
@@ -101,7 +92,7 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
-      - name: Upload build log on failure
+      - name: Upload build log
         if: failure()
         uses: actions/upload-artifact@v4
         with:
