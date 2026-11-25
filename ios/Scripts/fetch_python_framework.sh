@@ -9,26 +9,27 @@
 # fails intermittently with HTTP 403. Pinning makes the build reproducible.
 # Override with PYTHON_SUPPORT_URL=... to move to a newer build.
 #
-# Archive layout (3.12-b13):
-#   Python.xcframework/
-#     Info.plist
-#     ios-arm64/            -> Python.framework (device)
-#     ios-arm64_x86_64-simulator/
-#     lib/python3.12/       -> standard library, shared by both slices
+# Two outputs, deliberately kept apart:
+#   Resources/python/lib/python3.12   stdlib only, copied into the app bundle
+#   Vendor/Python.xcframework         linked by Xcode, never bundled wholesale
+#
+# The xcframework must NOT land in Resources: it carries a testbed project and
+# simulator slices (~60 MB of dead weight) that have no business in the .ipa.
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET="$ROOT/app/LingxiWorkspace/Resources/python"
+VENDOR="$ROOT/app/Vendor"
 MINOR="${PYTHON_MINOR:-3.12}"
 URL="${PYTHON_SUPPORT_URL:-https://github.com/beeware/Python-Apple-support/releases/download/3.12-b13/Python-3.12-iOS-support.b13.tar.gz}"
 
-if [ -d "$TARGET/lib/python${MINOR}" ]; then
+if [ -d "$TARGET/lib/python${MINOR}" ] && [ -d "$VENDOR/Python.xcframework" ]; then
     echo "==> python ${MINOR} already staged"
     exit 0
 fi
 
 echo "==> downloading $(basename "$URL")"
-mkdir -p "$TARGET"
+mkdir -p "$TARGET" "$VENDOR"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
@@ -47,7 +48,6 @@ fi
 echo "==> extracting"
 tar xzf "$TMP/python.tar.gz" -C "$TMP"
 
-# Find the directory that actually holds Python.xcframework.
 if [ -d "$TMP/Python.xcframework" ]; then
     SRC="$TMP"
 elif [ -n "$(find "$TMP" -maxdepth 2 -name Python.xcframework -type d | head -1)" ]; then
@@ -58,21 +58,34 @@ else
     exit 1
 fi
 
-cp -R "$SRC"/. "$TARGET"/
-
-# The standard library lives inside the framework; surface it at the top level
-# too so callers can use a single short path.
-if [ -d "$TARGET/Python.xcframework/lib/python${MINOR}" ] && [ ! -d "$TARGET/lib/python${MINOR}" ]; then
-    mkdir -p "$TARGET/lib"
-    cp -R "$TARGET/Python.xcframework/lib/python${MINOR}" "$TARGET/lib/"
-fi
-
-if [ ! -d "$TARGET/lib/python${MINOR}" ]; then
-    echo "archive did not provide lib/python${MINOR}" >&2
-    find "$TARGET" -maxdepth 4 -type d -name 'python*' | head -20 >&2
+XCF="$SRC/Python.xcframework"
+if [ ! -d "$XCF/ios-arm64/Python.framework" ]; then
+    echo "device slice missing in $XCF" >&2
+    ls "$XCF" >&2
     exit 1
 fi
 
+# 1. The xcframework goes to Vendor/ for linking only.
+rm -rf "$VENDOR/Python.xcframework"
+mkdir -p "$VENDOR"
+cp -R "$XCF" "$VENDOR/"
+echo "==> xcframework staged at $VENDOR/Python.xcframework"
+
+# 2. Only the standard library goes into the bundle.
+STDLIB="$XCF/lib/python${MINOR}"
+if [ ! -d "$STDLIB" ]; then
+    echo "archive did not provide lib/python${MINOR}" >&2
+    find "$XCF" -maxdepth 3 -type d -name 'python*' | head -20 >&2
+    exit 1
+fi
+
+rm -rf "$TARGET/lib"
+mkdir -p "$TARGET/lib"
+cp -R "$STDLIB" "$TARGET/lib/python${MINOR}"
+
+# Drop caches and test suites: they bloat the .ipa and are never imported.
+find "$TARGET/lib" -name '__pycache__' -type d -prune -exec rm -rf {} + 2>/dev/null || true
+find "$TARGET/lib" -name 'test' -type d -path '*/site-packages/*'  -prune -exec rm -rf {} + 2>/dev/null || true
+
 echo "==> python ${MINOR} staged at $TARGET"
-du -sh "$TARGET"
-ls "$TARGET"
+du -sh "$TARGET/lib" "$VENDOR/Python.xcframework"
