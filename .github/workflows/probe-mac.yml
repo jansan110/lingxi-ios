@@ -7,6 +7,6 @@ jobs:
     steps:
       - name: hello
         run: |
-          echo macos-runner-alive
+          echo "macos runner alive"
           sw_vers
           xcodebuild -version
