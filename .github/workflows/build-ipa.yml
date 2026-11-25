@@ -37,14 +37,17 @@ jobs:
         run: |
           set -eu
           B=ios/app/LingxiWorkspace/Resources/business
+          P=ios/app/LingxiWorkspace/Resources/python
           test -f "$B/app.py"
           test -f "$B/ios_runtime.py"
           test -f "$B/java.py"
           test -d "$B/templates"
           test -d "$B/static"
-          test -d ios/app/LingxiWorkspace/Resources/python/lib/python3.12
+          test -d "$P/lib/python3.12"
+          test -d "$P/Python.xcframework/ios-arm64"
+          test -f "$P/Python.xcframework/ios-arm64/Python.framework/Python"
           echo "payload ok"
-          du -sh "$B" ios/app/LingxiWorkspace/Resources/python
+          du -sh "$B" "$P"
 
       - name: Build unsigned app
         working-directory: ios/app
@@ -75,7 +78,7 @@ jobs:
             ls -R build/Build/Products 2>/dev/null | head -40
             exit 1
           fi
-          file "$APP/LingxiWorkspace"
+          file "$APP/LingxiWorkspace" || true
           lipo -info "$APP/LingxiWorkspace" || true
           rm -rf Payload LingxiWorkspace-unsigned.ipa
           mkdir -p Payload
