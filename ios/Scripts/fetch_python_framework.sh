@@ -1,110 +1,88 @@
 #!/bin/sh
-# Fetch the prebuilt CPython for iOS from beeware/Python-Apple-support.
+# Fetch a prebuilt CPython for iOS from beeware/Python-Apple-support.
 #
-# This is the iOS equivalent of what Chaquopy bundles into the APK: the real
-# interpreter, not a reimplementation. The release contains an xcframework plus
-# the full standard library for iOS arm64.
+# This is the iOS equivalent of what Chaquopy bundles into the APK: it is the
+# real interpreter plus its standard library, not a reimplementation of it.
 #
-# Asset names have changed across releases (".b1", ".b2", ".tar.gz" vs
-# ".tar.xz"), so the name is resolved from the release API at run time instead
-# of being hardcoded here. Set PYTHON_RELEASE to pin a specific tag.
+# Asset naming across releases is not stable, so instead of guessing a URL we
+# ask the GitHub API for the newest release of the requested minor line and
+# pick the iOS asset out of it.
 set -eu
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TARGET="$ROOT/app/LingxiWorkspace/Resources/python"
+MINOR="${PYTHON_MINOR:-3.12}"
 
-if [ -d "$TARGET/lib/python3.12" ] && [ -d "$TARGET/Python.xcframework" ]; then
-    echo "==> python framework already present"
+if [ -d "$TARGET/lib/python${MINOR}" ]; then
+    echo "==> python ${MINOR} already staged"
     exit 0
 fi
 
-PYTHON_BIN="${PYTHON:-python3}"
-mkdir -p "$TARGET"
+echo "==> resolving Python-Apple-support release for ${MINOR}"
+URL=$(MINOR="$MINOR" python3 - <<'PY'
+import json, os, re, sys, urllib.request
 
-echo "==> resolving Python-Apple-support release"
-URL="$("$PYTHON_BIN" - "${PYTHON_RELEASE:-}" <<'PY'
-import json
-import sys
-import urllib.request
+minor = os.environ["MINOR"]
+req = urllib.request.Request(
+    "https://api.github.com/repos/beeware/Python-Apple-support/releases?per_page=100",
+    headers={"User-Agent": "lingxi-ios-build", "Accept": "application/vnd.github+json"},
+)
+releases = json.loads(urllib.request.urlopen(req, timeout=60).read())
 
-pinned = sys.argv[1] if len(sys.argv) > 1 else ""
-api = "https://api.github.com/repos/beeware/Python-Apple-support/releases"
-if pinned:
-    api += "/tags/" + pinned
-else:
-    api += "?per_page=20"
+def rank(tag):
+    """Newest build wins; 3.12-b6 > 3.12-b5 > 3.12-b1."""
+    m = re.match(rf"^{re.escape(minor)}-b(\d+)$", tag)
+    return int(m.group(1)) if m else -1
 
-request = urllib.request.Request(api, headers={"User-Agent": "lingxi-ios-build"})
-releases = json.loads(urllib.request.urlopen(request, timeout=60).read())
-if isinstance(releases, dict):
-    releases = [releases]
+candidates = [r for r in releases if rank(r["tag_name"]) >= 0]
+if not candidates:
+    sys.exit(f"no release found for Python {minor}")
 
-for release in releases:
-    if release.get("draft"):
-        continue
-    for asset in release.get("assets", []):
-        name = asset.get("name", "")
-        # The iOS support bundle, not the macOS/tvOS/watchOS ones.
-        if not name.startswith("Python-") or "iOS-support" not in name:
-            continue
-        if not (name.endswith(".tar.gz") or name.endswith(".tar.xz") or name.endswith(".zip")):
-            continue
+latest = max(candidates, key=lambda r: rank(r["tag_name"]))
+for asset in latest["assets"]:
+    if re.match(rf"^Python-{re.escape(minor)}-iOS-support\..*\.tar\.gz$", asset["name"]):
         print(asset["browser_download_url"])
-        sys.exit(0)
-
-sys.exit("no iOS support asset found in the release list")
+        break
+else:
+    sys.exit(f"release {latest['tag_name']} has no iOS asset")
 PY
-)"
+)
 
 if [ -z "$URL" ]; then
-    echo "could not resolve a Python-Apple-support release" >&2
+    echo "could not resolve a download URL" >&2
     exit 1
 fi
-echo "    $URL"
 
+echo "==> downloading $(basename "$URL")"
+mkdir -p "$TARGET"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
-echo "==> downloading"
-case "$URL" in
-    *.tar.gz)  curl -fL --retry 3 "$URL" -o "$TMP/python.tar.gz" && tar xzf "$TMP/python.tar.gz" -C "$TMP" ;;
-    *.tar.xz)  curl -fL --retry 3 "$URL" -o "$TMP/python.tar.xz" && tar xJf "$TMP/python.tar.xz" -C "$TMP" ;;
-    *.zip)     curl -fL --retry 3 "$URL" -o "$TMP/python.zip"    && unzip -q "$TMP/python.zip" -d "$TMP" ;;
-    *)         echo "unsupported archive: $URL" >&2; exit 1 ;;
-esac
+curl -fL --retry 3 --retry-delay 2 "$URL" -o "$TMP/python.tar.gz"
 
-# The archive has a single top-level directory; flatten it into Resources/python.
-SOURCE="$(find "$TMP" -maxdepth 1 -mindepth 1 -type d | head -1)"
-if [ -z "$SOURCE" ]; then
-    echo "archive did not contain a directory" >&2
+echo "==> extracting"
+tar xzf "$TMP/python.tar.gz" -C "$TMP"
+
+# The archive either contains the payload at the top level or wraps it in a
+# single directory; handle both.
+if [ -d "$TMP/lib" ] || [ -d "$TMP/Python.xcframework" ]; then
+    SRC="$TMP"
+else
+    SRC="$(find "$TMP" -maxdepth 1 -mindepth 1 -type d ! -name 'python.tar.gz' | head -1)"
+fi
+if [ -z "$SRC" ] || [ ! -d "$SRC" ]; then
+    echo "unexpected archive layout:" >&2
+    ls -la "$TMP" >&2
     exit 1
 fi
 
-# Newer releases nest everything under a "python" directory holding
-# Python.xcframework and lib/; older ones put them at the root.
-if [ -d "$SOURCE/python/Python.xcframework" ]; then
-    SOURCE="$SOURCE/python"
-fi
+cp -R "$SRC"/. "$TARGET"/
 
-cp -R "$SOURCE"/. "$TARGET"/
-
-# Python.xcframework keeps the stdlib inside the iOS slice for device builds.
-if [ ! -d "$TARGET/lib/python3.12" ]; then
-    for candidate in "$TARGET"/Python.xcframework/ios-arm64/*/lib/python3.12 \
-                     "$TARGET"/Python.xcframework/ios-arm64_x86_64-simulator/*/lib/python3.12; do
-        if [ -d "$candidate" ]; then
-            mkdir -p "$TARGET/lib"
-            cp -R "$candidate" "$TARGET/lib/"
-            break
-        fi
-    done
-fi
-
-if [ ! -d "$TARGET/lib/python3.12" ]; then
-    echo "stdlib not found after extraction; inspect $TARGET" >&2
-    ls -la "$TARGET" >&2
+if [ ! -d "$TARGET/lib/python${MINOR}" ]; then
+    echo "archive did not provide lib/python${MINOR}" >&2
+    find "$TARGET" -maxdepth 3 -type d | head -30 >&2
     exit 1
 fi
 
-echo "==> python framework installed"
+echo "==> python ${MINOR} staged at $TARGET"
 du -sh "$TARGET"
